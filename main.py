@@ -91,7 +91,9 @@ def main():
         values = result.get('values', [])
         
         successful_indeces = []
-        for i in range(len(values)):
+
+        # Iterate over the list backwards to maintain sheet order in iTunes
+        for i in range(len(values) - 1, -1, -1):
             [link, title, artist, album, genre] = values[i]
             try:
                 # Extract audio file as .mp4 and download
@@ -103,7 +105,7 @@ def main():
                 # in iTunes
                 audio = AudioFileClip(mp4_out_file)
                 audio_out_file = f'{DOWNLOAD_PATH}/{title}.mp3'
-                audio.write_audiofile(audio_out_file)
+                audio.write_audiofile(audio_out_file, bitrate='128k')
 
                 # Add metadata for iTunes
                 metadata_audio = eyed3.load(audio_out_file)
